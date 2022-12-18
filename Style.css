@@ -1,0 +1,20 @@
+h2{
+    border: ridge 10px rgb(0, 5, 10);
+    padding: 0;
+    background-color: rgb(17, 177, 252);
+    color: rgb(2, 1, 29);
+}
+
+body{
+    background-color: aquamarine;
+}
+
+#Add{
+    background-color: chartreuse;
+    
+
+}
+
+#TodoList{
+    border: outset 10px cyan;
+}

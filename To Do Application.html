@@ -1,0 +1,136 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> To do Application</title>
+    <link rel="stylesheet" href="Style.css">
+  </head>
+  <body>
+    <center>
+      <h2>To DO Application</h2>
+    <input id="NewTodo" type="text" placeholder="New Todo Item"/>
+    <input id="Date" type="date" />
+    <button id="Add" onclick="AddTodo()">Add Todo</button>
+
+    <div id="TodoList"></div>
+  </center>
+    <script>
+      // Model
+
+      let todos;
+
+      // Retrieve localStorage
+      const savedTodos = JSON.parse(localStorage.getItem('TodosListkey'));
+      //Check if Todo is an array
+      if (Array.isArray(savedTodos)) {
+        todos = savedTodos;
+      } else {
+        todos = [
+          {
+          title: 'Worship the Lord',
+          dueDate: 'Everyday',
+          id: 'id1'
+        }, 
+        {
+          title: 'Go Shopping',
+          dueDate: '2022-12-27',
+          id: 'id2'
+        }, 
+        {
+          title: 'Date with wife',
+          dueDate: '2022-12-25',
+          id: 'id3'
+        }
+        ];
+      }
+
+      //Create a todo
+      const CreateTodo = (title, dueDate) => {
+        const id = '' + new Date().getTime();
+        //Add a to
+        todos.push({
+          title: title,
+          dueDate: dueDate,
+          id: id
+        });
+
+        storeTodos();
+      }
+
+      //Delete a todo with use of the filter method
+      const RemoveTodo = idToDelete => {
+        todos = todos.filter(todo => {
+      //If the id of the current todo matches idToDelete then return false
+           // For all other conditions, return true
+          if (todo.id === idToDelete) {
+            return false;
+          } 
+          else {
+            return true;
+          }
+        });
+
+        storeTodos();
+      }
+
+      //Function for storing todos into local storage
+        const storeTodos = () => {
+        localStorage.setItem('TodosListkey', JSON.stringify(todos));
+      }
+
+
+      
+      // Controller
+        const AddTodo = () => {
+        const textbox = document.getElementById('NewTodo');
+        const Todo = textbox.value;
+        //Define Date
+        const date = document.getElementById('Date');
+        const dueDate = date.value;
+        //Create Todo function
+        CreateTodo (Todo, dueDate);
+        //Display
+        display();
+      }
+      
+      //Delete event
+        const DeleteTodo = event => {
+        //Set deleteButton target id
+        const deleteButton = event.target;
+        const idToDelete = deleteButton.id;
+        //Remove Todo function for specific id
+        RemoveTodo(idToDelete);
+        //Display
+        display();
+      }
+
+      //VIEW
+
+      const display = () => {
+        //Reset list
+        document.getElementById("TodoList").innerHTML = "";
+        //Loop through Todo Array
+        todos.forEach(todo => {
+           /*Create HTML div element*/
+          const element = document.createElement('div');
+          element.innerText = todo.title + ' ' + todo.dueDate;
+          //Create delete button element
+          const deleteButton = document.createElement('button');
+          deleteButton.innerText = 'Delete';
+          //Assign Delete function to deleteButton
+          deleteButton.onclick = DeleteTodo;
+          //Assign a unique todo id to every delete button
+          deleteButton.id = todo.id;
+          //Append the delete button to the page
+          element.appendChild(deleteButton);
+          //Append the TodoLIst to the delement div
+          const todoList = document.getElementById('TodoList');
+          todoList.appendChild(element);
+        });
+      }
+
+      display();
+    </script>
+  </body>
+</html>
